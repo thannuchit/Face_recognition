@@ -34,28 +34,28 @@ face_names = []
 process_this_frame = True
 
 while True:
-    # ดึงเฟรมภาพมาจากวีดีโอ
+    
     ret, frame = video_capture.read()
 
-    # ย่อขนาดเฟรมเหลือ 1/4 ทำให้ face recognition ทำงานได้เร็วขึ้น
+   
     small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
-    # แปลงสีภาพจาก BGR (ถูกใช้ใน OpenCV) เป็นสีแบบ RGB (ถูกใช้ใน face_recognition)
+    
     rgb_small_frame = small_frame[:, :, ::-1]
 
-    # ประมวลผลเฟรมเว้นเฟรมเพื่อประหยัดเวลา
+    
     if process_this_frame:
-        # ค้นหาใบหน้าที่มีทั้งหมดในภาพ จากนั้นทำการ encodings ใบหน้าเพื่อจะนำไปใช้เปรียบเทียบต่อ
+        
         face_locations = face_recognition.face_locations(rgb_small_frame)
         face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
 
         face_names = []
         for face_encoding in face_encodings:
-            # ทำการเปรียบเทียบใบหน้าที่อยู่ในวีดีโอกับใบหน้าที่รู้จักในระบบ
+            
             matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
             name = "Unknown"
 
-            # ถ้า encoding แล้วใบหน้าตรงกันก็จะแสดงข้อมูล
+            
             if True in matches:
                 first_match_index = matches.index(True)
                 name = known_face_names[first_match_index]
